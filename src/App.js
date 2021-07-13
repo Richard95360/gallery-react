@@ -3,6 +3,7 @@ import Counter from './components/Counter';
 import { BrowserRouter  as Router, Route, Switch,Link } from 'react-router-dom';
 import About from './components/About';
 import Gallery from './components/Gallery';
+import HitDetails from './components/HitDetails';
 
 const App =() => {
   return (
@@ -29,6 +30,7 @@ const App =() => {
           <Route exact path="/counter" component={Counter} />
           <Route exact path="/about" component={About} />
           <Route exact path="/gallery" component={Gallery} />
+          <Route exact path="/hitDetails/:id" component={HitDetails} />
           
         </Switch>
       </div>
