@@ -13,7 +13,7 @@ const HitItem = (props) => {
                        ( props.details ===false) ?
                         <img className="card-img" height={200} src={props.hit.webformatURL} alt="hit" />
                         :
-                        <img  src={props.hit.largeImageURL} alt="image" />
+                        <img  src={props.hit.largeImageURL} alt="imageLarge" />
                     }
 
                 </div>
