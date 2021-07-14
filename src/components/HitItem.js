@@ -1,56 +1,55 @@
 import { Link } from 'react-router-dom'
-import React, { Component } from 'react';
+import React from 'react';
 
-class HitItem extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            
-        }
-    }
-    
-    render() {
+const HitItem = (props) => {
         return (
-            <div className="col-md-4" key={this.props.hit.id}>
+            <div className={!props.details ?  'col-md-4 mt-2' : 'mt-2'} key={props.hit.id}>
             <div className="card">
-                <div className="card-header">{this.props.hit.tags} | {this.props.hit.webformatWidth} x {this.props.hit.webformatHeight}</div>
-                <div className="card-body">
-                    <img className="card-img" height={200} src={this.props.hit.webformatURL} alt="hit" />
+                <div className="card-header">{props.hit.tags } 
+                | {props.details === false?props.hit.webformatWidth:props.hit.imageWidth}
+                 x {props.details === false?props.hit.webformatHeight:props.hit.imageHeight}</div>
+                <div className="card-body ">
+                    {
+                       ( props.details ===false) ?
+                        <img className="card-img" height={200} src={props.hit.webformatURL} alt="hit" />
+                        :
+                        <img  src={props.hit.largeImageURL} alt="image" />
+                    }
 
                 </div>
                 <div>
-                    <Link  to={"/hitDetails/"+this.props.hit.id } className="btn btn-success">Hit Details</Link>
+                    {
+                    props.details===false ?
+                    <div className="m-2">
+                        <Link  to={`/hitDetails/${props.hit.id} `} className="btn btn-success">Hit Details</Link>
+                    </div>
+                    :
+                    <div>
+                        <div className="row p-4">
+                            <div className="col-auto">
+                                <img src={props.hit.userImageURL} className="img-thumbnail" alt="user"/>
+                            </div>
+                            <div>
+                                <ul className="nav nav-pills">
+                                    <li className="list-group-item">View :<strong>{props.hit.views}</strong></li>
+                                    <li className="list-group-item">Comments :<strong>{props.hit.comments}</strong></li>
+                                    <li className="list-group-item">Download :<strong>{props.hit.downloads}</strong></li>
+                                    <li className="list-group-item">Favorites :<strong>{props.hit.collections}</strong></li>
+                                    <li className="list-group-item">Likes :<strong>{props.hit.likes}</strong></li>
+                                </ul>
+                            </div>  
+                        </div>
+                        <div className="m-2">
+                            <Link className="btn btn-primary" to="/gallery">Back</Link>
+                        </div>
+                    </div>
+                    }
                 </div>
             </div>
         </div>
         );
-    }
+    
 }
 
 export default HitItem;
 
-/* 
- import React from 'react';
-import { Link } from 'react-router-dom';
-
-const HitItem = (props) => {
-
-    console.log(props.webformatHeight);
-    
-    return (
-        <div className="col-md-4" key={props.hit.id}>
-                        <div className="card">
-                            <div className="card-header">{props.id.tags} | {props.hit.webformatWidth} x {props.hits.webformatHeight}</div>
-                            <div className="card-body">
-                                <img className="card-img" height={200} src={props.hit.webformatURL} alt="hit" />
-
-                            </div>
-                            <div>
-                                <Link  to={"/hitDetails/"+props.hit.id } className="btn btn-success">Hit Details</Link>
-                            </div>
-                        </div>
-                    </div>
-    );
-};
-
-export default HitItem;  */

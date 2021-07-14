@@ -12,7 +12,7 @@ class HitDetails extends Component {
     }
 
     getHits(id){
-    let url = 'https://pixabay.com/api/?key=19764607-f465de43e4c090ee2953701fa&q='+id
+    let url = "https://pixabay.com/api/?key=19764607-f465de43e4c090ee2953701fa&id="+id;
     axios.get(url).then((res) => {
         this.setState({
             hit:res.data.hits[0]
@@ -26,7 +26,7 @@ class HitDetails extends Component {
 }
 
 componentDidMount() {
-    this.getHits(this.props.match.params.id)
+  this.getHits(this.props.match.params.id)
 }
 
     
@@ -48,25 +48,25 @@ componentDidMount() {
     }
 }
 
-export default HitDetails;
-
+export default HitDetails;  
 
 /* import React,{useState,useEffect} from 'react';
 import axios from 'axios';
-import Hititem from './Hititem';
+import HitItem from './HitItem';
 
-const HitDetails = (children) => {
+const HitDetails = (props) => {
+    console.log(props);
 
-    const [hit, setHitState] = useState({hits:null})
+    const [hit, setHitState] = useState({hit:null})
 
 
 
    const getHits=(id) => {
-        let url = 'https://pixabay.com/api/?key=19764607-f465de43e4c090ee2953701fa&q='+id
+        let url =` https://pixabay.com/api/?key=19764607-f465de43e4c090ee2953701fa&id=${id}`
         axios.get(url).then(res => {
             console.log(res.data);
             setHitState({
-                hits:res.data.hits
+                hit:res.data.hits[0]
                
             })
         }).catch(err => {
@@ -77,15 +77,15 @@ const HitDetails = (children) => {
     }
 
 useEffect(() => {
-   getHits(children.match.params.id)
+  getHits(props.match.params.id)
 }, [])
 
 
     return (
         <div className="container">
-         {  <Hititem hit={hit} details={true}/> }
+         {  <HitItem hit={hit} details={true}/> }
         </div>
     );
 };
 
-export default HitDetails; */
+export default HitDetails;   */
