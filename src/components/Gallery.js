@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -100,161 +101,107 @@ class Gallery extends Component {
 
 
 
-export default Gallery; 
+export default Gallery;  
 
- /* import axios from 'axios';
+/* import axios from 'axios';
 import React,{useState, useEffect} from 'react';
+import SearchHitForm from './SearchHitForm';
+import HitItem from './HitItem';
 
-const Gallery = () => {
+const Gallery = (props) => {
 
     
+    const [gallery,setGallery] = useState(
+        {
 
-     const [pagination, setPagination] = useState({currentKeyword:'',
-     currentPage:1,
-     pageSize:10,
-     totalPages:1,
-     pages:[],
-    })
-
-    const [galleryState, setGalleryState] = useState({hits:[]})
-
-    const [gallState,setGallState] = useState({ gallery:{ 
+        hits:[],
         currentKeyword:'',
         currentPage:1,
         pageSize:10,
         totalPages:1,
-        pages:[],
-    }})
+        pages:[]
+        
+    } )
 
-
-     
- const getHits = () => {
-     let url= 'https://pixabay.com/api/?key=19764607-f465de43e4c090ee2953701fa&q='+gallState.gallery.currentKeyword
-     
-    axios.get(url)
-    .then((res ) => {
-     
-     setGalleryState({
-         hits: res.data.hits,
-       
+    useEffect(() => {
+        //  getHits();
          
-     })
-     
-    }).catch(err => {
-        console.log(err);
-    })
-}
-
-const getPaginate = () => {
-    let url = 'https://pixabay.com/api/?key=19764607-f465de43e4c090ee2953701fa&q='+pagination.currentKeyword+"&page="+pagination.currentPage+"&per_page="+pagination.pageSize;
-    axios.get(url).then((res )=> {
-    let totalP = (res.data.totalHits%pagination.pageSize === 0) ? (res.data.totalHits/pagination.pageSize ):( 1+res.data.totalHits/pagination.pageSize);
-   setPagination({
-       currentPage: totalP,
-       pages:new Array(totalP).fill(0)
+      }, [gallery])
+      
     
-    })
-    
-     }).catch(err => {
-       console.log(err);
-   })
 
-}
+  const  getHits=(keyword)=> {
+        let url = 'https://pixabay.com/api/?key=19764607-f465de43e4c090ee2953701fa&q='
+        +keyword+"&page="+gallery.currentPage+"&per_page="+gallery.pageSize;
+        axios.get(url)
+        .then(res => {
+            let totalP = (res.data.totalHits%gallery.pageSize === 0)
+             ? res.data.totalHits/gallery.pageSize : 1+Math.floor(res.data.totalHits/gallery.pageSize);
+            
+            setGallery({
+                hits:res.data.hits,
+                totalPages: totalP,
+                pages:new Array(totalP).fill(0),
+                currentKeyword:keyword
+            })
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 
-useEffect(() => {
-   // getHits();
    
-}, [])
 
-useEffect(() => {
-    
- getPaginate() 
-    
-}, [])
+  const  search=(keyword)=>{
+     
+        setGallery({
+            currentPage:1,
+            pages:[]
+        },() => {
 
+            getHits(keyword);
+        })
+       
+    }
 
-const setKeyword = (e) => {
-    e.preventDefault();
-   let  newCurrentKeyword = {...gallState.gallery.currentKeyword}
-   newCurrentKeyword[e.target.name] = e.target.value
-   setGallState({
-       gallery: newCurrentKeyword
-   })
-}
+  const  getToPage = (page) => {
+      setGallery({
+           page
+      },() => {
 
-const search = (e) => {
-e.preventDefault();
-  getHits();
-}
-
- const getToPage = (page) => {  
-
-setPagination({
-    currentPage: page
-});
-getPaginate();
- }
+         getHits(gallery.currentKeyword);
+      });
+    }
 
  
     return (
-        
+        <>
         <div>
-            <form onSubmit={search}>
-                <div className="row m-2 p-2">
-                    <div className="col">
-                        <input 
-                        type="text"
-                        name="currentKeyword"
-                        value={gallState.gallery.currentKeyword}
-                        onChange={setKeyword}
-                         className="form-control"
-                         placeholder="keyword"
-                          />
-                    </div>
-                    <div className="col-auto">
-                        <button className="btn btn-success" type="submit">Chercher</button>
-                    </div>
-                </div>
-            </form>
+        <ul className="nav nav-pills">
 
-            <div className="row">
+            { 
+              gallery.pages.map((v,index) =>
 
-            {
+            <li key={index}>
+            <button  className={gallery.currentPage===index+1?'btn btn-info' : 'btn btn-link'} onClick={() => getToPage(index+1)}>{index+1}</button>
+            </li>
+                 )
                 
-          
-             galleryState.hits.map(hit => 
-                
-                <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-header">{hit.tags} | {hit.webformatWidth} x {hit.webformatHeight}</div>
-                            <div className="card-body">
-                                <img className="card-img" height={200} src={hit.webformatURL} alt="img" />
+            } 
+        </ul>
+    </div> 
+      
 
-                            </div>
-                        </div>
-                    </div>
-                )
-                
-             } 
-            </div>
-                <>
-                <ul className="nav nav-pills">
+     <SearchHitForm onSearch={search} />
+      
+    <div className="row">
+    {
+      gallery.hits.map((hit,index) =>  <HitItem key={index} hit={hit} details={false} />)
+    } 
 
-                    { 
-                      pagination.pages.map((v,index) =>{
 
-                       return  (<li>
-                            <a className="btn btn-info m-1" onClick={() => getToPage(index+1)}>{index+1}</a>
-                         </li>)
-                         })
-                        
-                    } 
-                </ul>
-            </> 
-        </div>
-
-            
-        
+    </div>
+    
+      </>  
     
     );
 };

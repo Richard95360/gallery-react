@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom'
 import React from 'react';
 
+
 const HitItem = (props) => {
         return (
+          
+
             <div className={!props.details ?  'col-md-4 mt-2' : 'mt-2'} key={props.hit.id}>
             <div className="card">
                 <div className="card-header">{props.hit.tags } 
@@ -47,6 +50,7 @@ const HitItem = (props) => {
                 </div>
             </div>
         </div>
+            
         );
     
 }
